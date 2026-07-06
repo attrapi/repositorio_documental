@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Repositorio Documental · SPAC</title>
+<title>Repositorio Normativo · SPAC</title>
 <meta name="description" content="Consulta en línea de documentos institucionales.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,12 +32,13 @@
     -webkit-font-smoothing:antialiased;
   }
 
-  /* ---- riel: elemento firma ---- */
+  /* ---- riel: vía vista desde arriba (durmientes + dos rieles) ---- */
   .rail{
-    height:14px;
+    height:16px;
     background:
-      repeating-linear-gradient(90deg, var(--steel) 0 3px, transparent 3px 22px) center/100% 3px no-repeat,
-      linear-gradient(var(--signal),var(--signal)) center/100% 2px no-repeat;
+      linear-gradient(var(--signal),var(--signal)) left top 3px/100% 2px no-repeat,
+      linear-gradient(var(--signal),var(--signal)) left bottom 3px/100% 2px no-repeat,
+      repeating-linear-gradient(90deg, var(--steel) 0 5px, transparent 5px 22px);
     opacity:.9;
   }
 
@@ -199,17 +200,6 @@
     display:none;
   }
 
-  footer{
-    border-top:1px solid var(--line);
-    margin-top:20px;
-  }
-  .foot-in{
-    max-width:1080px;margin:0 auto;padding:22px 28px;
-    display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
-    font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);
-    letter-spacing:.03em;
-  }
-
   /* focus visible accesible */
   a:focus-visible, input:focus-visible{
     outline:2px solid var(--focus);
@@ -257,7 +247,6 @@
   @media (max-width:520px){
     header{padding:26px 20px 20px}
     .bar,main{padding-left:20px;padding-right:20px}
-    .foot-in{padding-left:20px;padding-right:20px}
   }
 </style>
 </head>
@@ -303,7 +292,7 @@
     <span class="dot"></span>
     Agencia de Trenes y Transporte Público Integrado · SPAC
   </div>
-  <h1>Repositorio Documental</h1>
+  <h1>Repositorio Normativo</h1>
   <p class="lede">Consulta en línea de documentos institucionales. Acceso reservado a personal de ATTRAPI. Los archivos se visualizan directamente; no están habilitados para descarga.</p>
 </header>
 
@@ -398,13 +387,6 @@
     <div class="empty" id="empty">No hay documentos que coincidan con la búsqueda.</div>
   </div>
 </main>
-
-<footer>
-  <div class="foot-in">
-    <span>ATTRAPI · Subdirección de Procesos Administrativos de Construcción</span>
-    <span>Uso interno</span>
-  </div>
-</footer>
 
 <script>
   // Quitar el loader del DOM al terminar el cruce del tren
