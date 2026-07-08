@@ -262,6 +262,26 @@
     width:16px;height:16px;color:var(--muted);
   }
   .b-list{max-width:960px;margin:16px auto 0;padding:0 28px}
+  .b-flex{display:flex;gap:18px;align-items:stretch}
+  .b-flex .b-card{flex:1;min-width:0}
+
+  /* ---- vía vertical: cambio de vía + riel a lo largo del listado ---- */
+  .b-track{
+    width:28px;
+    flex:none;
+    display:flex;
+    flex-direction:column;
+    opacity:.9;
+  }
+  .b-switch{width:28px;height:92px;flex:none;display:block}
+  .b-rail-v{
+    flex:1;
+    background:
+      linear-gradient(var(--signal),var(--signal)) 7px 0/2px 100% no-repeat,
+      linear-gradient(var(--signal),var(--signal)) 19px 0/2px 100% no-repeat,
+      repeating-linear-gradient(180deg, var(--steel) 0 5px, transparent 5px 22px) 4px 0/20px 100% no-repeat;
+  }
+  @media (max-width:640px){.b-track{display:none}}
   .b-card{
     background:#fff;
     border:1px solid var(--line);
@@ -490,6 +510,23 @@
   </div>
 
   <div class="b-list">
+    <div class="b-flex">
+      <div class="b-track" aria-hidden="true">
+        <svg class="b-switch" viewBox="0 0 28 92">
+          <!-- durmientes del desvío -->
+          <rect x="10" y="9" width="17" height="5" fill="#3D5566" transform="rotate(-42 18 11)"/>
+          <rect x="7" y="27" width="19" height="5" fill="#3D5566" transform="rotate(-18 16 29)"/>
+          <rect x="4" y="50" width="20" height="5" fill="#3D5566"/>
+          <rect x="4" y="72" width="20" height="5" fill="#3D5566"/>
+          <!-- cambio de vía: la línea llega desde la derecha y se desvía hacia abajo -->
+          <path d="M28 2 C 14 8, 8 22, 8 46" fill="none" stroke="#691C32" stroke-width="2"/>
+          <path d="M28 14 C 21 18, 20 28, 20 46" fill="none" stroke="#691C32" stroke-width="2"/>
+          <!-- rieles que continúan en recta -->
+          <path d="M8 44 V 92" fill="none" stroke="#691C32" stroke-width="2"/>
+          <path d="M20 44 V 92" fill="none" stroke="#691C32" stroke-width="2"/>
+        </svg>
+        <div class="b-rail-v"></div>
+      </div>
     <div class="b-card">
 
       <div class="b-row">
@@ -520,6 +557,7 @@
 
       <div class="b-empty" id="bEmpty">No hay documentos que coincidan con la búsqueda.</div>
     </div>
+    </div><!-- /b-flex -->
   </div>
 </div><!-- /viewB -->
 
