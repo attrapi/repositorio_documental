@@ -274,11 +274,10 @@
     opacity:.9;
   }
   .b-switch{
-    width:70px;
-    height:104px;
+    width:28px;
+    height:36px;
     flex:none;
     display:block;
-    margin-left:-24px;
   }
   .b-rail-v{
     flex:1;
@@ -518,20 +517,14 @@
   <div class="b-list">
     <div class="b-flex">
       <div class="b-track" aria-hidden="true">
-        <svg class="b-switch" viewBox="0 0 70 104">
-          <!-- durmientes -->
-          <rect x="2" y="2" width="5" height="24" fill="#3D5566"/>
-          <rect x="50" y="2" width="5" height="24" fill="#3D5566"/>
-          <rect x="18" y="23.5" width="20" height="5" fill="#3D5566" transform="rotate(55 28 26)"/>
-          <rect x="26" y="37.5" width="20" height="5" fill="#3D5566" transform="rotate(25 36 40)"/>
-          <rect x="28" y="60" width="20" height="5" fill="#3D5566"/>
-          <rect x="28" y="82" width="20" height="5" fill="#3D5566"/>
-          <!-- vía que llega desde la izquierda y sigue de frente -->
-          <path d="M0 8 H70" fill="none" stroke="#691C32" stroke-width="2"/>
-          <path d="M0 20 H70" fill="none" stroke="#691C32" stroke-width="2"/>
-          <!-- aguja: el desvío curva hacia abajo, a lo largo del listado -->
-          <path d="M8 8 C 28 10, 32 22, 32 46 V104" fill="none" stroke="#691C32" stroke-width="2"/>
-          <path d="M20 20 C 40 22, 44 34, 44 58 V104" fill="none" stroke="#691C32" stroke-width="2"/>
+        <svg class="b-switch" viewBox="0 0 28 36">
+          <!-- tope de vía: aquí inicia la línea -->
+          <rect x="2" y="0" width="24" height="5" rx="2.5" fill="#691C32"/>
+          <!-- rieles -->
+          <path d="M8 5 V36" fill="none" stroke="#691C32" stroke-width="2"/>
+          <path d="M20 5 V36" fill="none" stroke="#691C32" stroke-width="2"/>
+          <!-- primer durmiente -->
+          <rect x="4" y="14" width="20" height="5" fill="#3D5566"/>
         </svg>
         <div class="b-rail-v"></div>
       </div>
