@@ -1,0 +1,7 @@
+# Los PDFs pesan cientos de MB: viven en Cloudflare R2, no en git
+# (GitHub rechaza archivos mayores a 100 MB)
+docs/*.pdf
+
+# Estado local de wrangler / node
+.wrangler/
+node_modules/

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visor de documentos · SPAC</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23691C32'/%3E%3Cpath d='M20 14h17l9 9v27H20z' fill='%23fff'/%3E%3Cpath d='M37 14v9h9z' fill='%239A7B33'/%3E%3Crect x='25' y='31' width='14' height='3' rx='1.5' fill='%23691C32'/%3E%3Crect x='25' y='38' width='14' height='3' rx='1.5' fill='%23691C32'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17242E;
+    --mist:#EDF1F3;
+    --line:#D5DDE1;
+    --signal:#691C32;
+    --gold:#9A7B33;
+    --steel:#3D5566;
+    --muted:#9FB0BB;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    background:var(--mist);
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  /* ---- barra superior ---- */
+  .top{
+    background:var(--ink);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:10px 16px;
+    flex-wrap:wrap;
+  }
+  .back{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    color:#fff;
+    text-decoration:none;
+    font-size:13.5px;
+    font-weight:500;
+    padding:7px 12px;
+    border-radius:7px;
+    border:1px solid rgba(255,255,255,.25);
+    transition:background .15s;
+    white-space:nowrap;
+  }
+  .back:hover{background:rgba(255,255,255,.12)}
+  .back svg{width:14px;height:14px}
+  .doc-title{
+    flex:1;
+    min-width:160px;
+    font-size:14px;
+    font-weight:500;
+    letter-spacing:-.01em;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .doc-title .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:block;
+  }
+  .controls{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .controls button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:32px;height:32px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.2);
+    border-radius:7px;
+    color:#fff;
+    cursor:pointer;
+    transition:background .15s;
+  }
+  .controls button:hover{background:rgba(255,255,255,.2)}
+  .controls button:disabled{opacity:.35;cursor:default}
+  .controls button svg{width:15px;height:15px}
+  .pagebox{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    color:var(--muted);
+  }
+  .pagebox input{
+    width:56px;
+    text-align:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    color:#fff;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.2);
+    border-radius:7px;
+    padding:6px 4px;
+    outline:none;
+  }
+  .pagebox input:focus{border-color:var(--gold)}
+  .zoomlabel{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    color:var(--muted);
+    min-width:44px;
+    text-align:center;
+  }
+
+  /* ---- área del documento ---- */
+  .stage{
+    flex:1;
+    overflow:auto;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:24px;
+  }
+  canvas{
+    background:#fff;
+    box-shadow:0 12px 34px -16px rgba(23,36,46,.45);
+    border-radius:3px;
+    display:none;
+  }
+
+  /* ---- estados de carga / error ---- */
+  .status{
+    align-self:center;
+    text-align:center;
+    color:var(--steel);
+    font-size:14px;
+    max-width:46ch;
+  }
+  .status .pct{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--signal);
+    margin-top:8px;
+    display:block;
+  }
+  .spinner{
+    width:34px;height:34px;
+    margin:0 auto 14px;
+    border-radius:50%;
+    border:3px solid var(--line);
+    border-top-color:var(--signal);
+    animation:spin .9s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .status.error .spinner{display:none}
+  .status.error{color:var(--signal)}
+
+  a:focus-visible, input:focus-visible, button:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:2px;
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+  }
+  @media (max-width:560px){
+    .doc-title{order:3;flex-basis:100%}
+    .stage{padding:12px}
+  }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <a class="back" href="index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+    Repositorio
+  </a>
+  <div class="doc-title">
+    <span class="tag" id="docCode">Documento</span>
+    <span id="docTitle">Cargando…</span>
+  </div>
+  <div class="controls">
+    <button id="prev" type="button" aria-label="Página anterior" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <span class="pagebox">
+      <input id="pageInput" type="number" min="1" value="1" aria-label="Número de página" disabled>
+      <span>/ <span id="pageTotal">—</span></span>
+    </span>
+    <button id="next" type="button" aria-label="Página siguiente" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <button id="zoomOut" type="button" aria-label="Alejar" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>
+    </button>
+    <span class="zoomlabel" id="zoomLabel">—</span>
+    <button id="zoomIn" type="button" aria-label="Acercar" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+    <button id="fitWidth" type="button" aria-label="Ajustar al ancho" title="Ajustar al ancho" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="stage" id="stage">
+  <div class="status" id="status">
+    <div class="spinner"></div>
+    Preparando el documento…
+    <span class="pct" id="statusPct"></span>
+  </div>
+  <canvas id="canvas"></canvas>
+</div>
+
+<script type="module">
+  import * as pdfjsLib from './vendor/pdfjs/pdf.min.mjs';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = './vendor/pdfjs/pdf.worker.min.mjs';
+
+  // ============================================================
+  // REGISTRO DE DOCUMENTOS
+  // id → { file: nombre del objeto en R2 (llave exacta en la RAÍZ del bucket;
+  //         el worker lo sirve en /docs/<archivo>), code, title }
+  // Para agregar uno nuevo: sube el PDF a R2 y añade una línea aquí.
+  // ============================================================
+  const DOCS = {
+    'doc-01': {
+      file: 'AREMA-2024-Portfolio-of-Trackwork-and-Plans-Full-Book.pdf',
+      code: 'DOC-01',
+      title: 'AREMA 2024 Portfolio of Trackwork and Plans Full Book',
+    },
+    'doc-02': {
+      file: 'AREMA-MRE-2025-Full-Book.pdf',
+      code: 'DOC-02',
+      title: 'AREMA MRE 2025 Full Book',
+    },
+  };
+
+  const params = new URLSearchParams(location.search);
+  const entry = DOCS[params.get('doc')] ||
+    (params.get('f') ? { file: params.get('f'), code: 'Documento', title: params.get('t') || params.get('f') } : null);
+
+  const statusEl = document.getElementById('status');
+  const statusPct = document.getElementById('statusPct');
+  const canvas = document.getElementById('canvas');
+  const stage = document.getElementById('stage');
+  const pageInput = document.getElementById('pageInput');
+  const pageTotal = document.getElementById('pageTotal');
+  const zoomLabel = document.getElementById('zoomLabel');
+  const buttons = ['prev','next','zoomOut','zoomIn','fitWidth'].reduce(
+    (o, id) => (o[id] = document.getElementById(id), o), {});
+
+  function fail(msg){
+    statusEl.classList.add('error');
+    statusEl.innerHTML = '';
+    statusEl.append(msg);
+    statusEl.style.display = '';
+    canvas.style.display = 'none';
+  }
+
+  if (!entry) {
+    fail('No se indicó qué documento abrir. Regresa al repositorio y elige uno.');
+  } else {
+    document.getElementById('docCode').textContent = entry.code;
+    document.getElementById('docTitle').textContent = entry.title;
+    document.title = entry.title + ' · SPAC';
+    abrir(entry);
+  }
+
+  let pdf = null;
+  let pageNum = 1;
+  let scale = null;          // null = ajustar al ancho
+  let renderTask = null;
+  let rendering = false;
+  let pendingPage = null;
+
+  async function abrir(entry){
+    try {
+      const task = pdfjsLib.getDocument({
+        url: 'docs/' + encodeURIComponent(entry.file),
+        // Carga perezosa por rangos: no descarga el libro completo,
+        // solo los fragmentos que necesita cada página.
+        disableAutoFetch: true,
+        disableStream: true,
+        rangeChunkSize: 262144,
+      });
+      task.onProgress = ({ loaded, total }) => {
+        if (total) statusPct.textContent = Math.min(100, Math.round(loaded / total * 100)) + ' %';
+      };
+      pdf = await task.promise;
+      pageTotal.textContent = pdf.numPages;
+      pageInput.max = pdf.numPages;
+      pageInput.disabled = false;
+      Object.values(buttons).forEach(b => b.disabled = false);
+      await renderPage(1);
+    } catch (e) {
+      console.error(e);
+      fail('No se pudo cargar el documento. Verifica tu conexión o que el archivo exista en el repositorio.');
+    }
+  }
+
+  function fitWidthScale(page){
+    const viewport = page.getViewport({ scale: 1 });
+    const available = stage.clientWidth - 48; // padding del escenario
+    return Math.min(Math.max(available / viewport.width, 0.3), 4);
+  }
+
+  async function renderPage(num){
+    if (!pdf) return;
+    num = Math.min(Math.max(1, num), pdf.numPages);
+    if (rendering) { pendingPage = num; renderTask?.cancel(); return; }
+    rendering = true;
+    pageNum = num;
+    pageInput.value = num;
+    buttons.prev.disabled = num <= 1;
+    buttons.next.disabled = num >= pdf.numPages;
+
+    try {
+      const page = await pdf.getPage(num);
+      const s = scale ?? fitWidthScale(page);
+      zoomLabel.textContent = Math.round(s * 100) + ' %';
+      const dpr = window.devicePixelRatio || 1;
+      const viewport = page.getViewport({ scale: s });
+      canvas.width = Math.floor(viewport.width * dpr);
+      canvas.height = Math.floor(viewport.height * dpr);
+      canvas.style.width = Math.floor(viewport.width) + 'px';
+      canvas.style.height = Math.floor(viewport.height) + 'px';
+
+      renderTask = page.render({
+        canvasContext: canvas.getContext('2d'),
+        viewport,
+        transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : undefined,
+      });
+      await renderTask.promise;
+      statusEl.style.display = 'none';
+      canvas.style.display = 'block';
+    } catch (e) {
+      if (e?.name !== 'RenderingCancelledException') {
+        console.error(e);
+        fail('Ocurrió un error al mostrar la página ' + num + '.');
+      }
+    } finally {
+      rendering = false;
+      renderTask = null;
+      if (pendingPage !== null) {
+        const p = pendingPage;
+        pendingPage = null;
+        renderPage(p);
+      }
+    }
+  }
+
+  buttons.prev.addEventListener('click', () => renderPage(pageNum - 1));
+  buttons.next.addEventListener('click', () => renderPage(pageNum + 1));
+  pageInput.addEventListener('change', () => renderPage(parseInt(pageInput.value, 10) || 1));
+
+  function setZoom(mult){
+    const current = scale ?? parseFloat(zoomLabel.textContent) / 100 || 1;
+    scale = Math.min(Math.max(current * mult, 0.3), 4);
+    renderPage(pageNum);
+  }
+  buttons.zoomIn.addEventListener('click', () => setZoom(1.2));
+  buttons.zoomOut.addEventListener('click', () => setZoom(1 / 1.2));
+  buttons.fitWidth.addEventListener('click', () => { scale = null; renderPage(pageNum); });
+
+  window.addEventListener('resize', () => {
+    if (scale === null && pdf) renderPage(pageNum);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target === pageInput) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); renderPage(pageNum + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); renderPage(pageNum - 1); }
+    if (e.key === '+') setZoom(1.2);
+    if (e.key === '-') setZoom(1 / 1.2);
+  });
+</script>
+</body>
+</html>

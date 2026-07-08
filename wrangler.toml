@@ -1,0 +1,9 @@
+# Configuración del proyecto de Cloudflare Pages
+name = "repositorio-documental"
+compatibility_date = "2026-07-01"
+pages_build_output_dir = "public"
+
+# Bucket R2 donde viven los PDFs (los sirve public/_worker.js en /docs/...)
+[[r2_buckets]]
+binding = "DOCS"
+bucket_name = "documentos"

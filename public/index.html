@@ -417,21 +417,19 @@
 
     <!-- ============================================================
          CÓMO AGREGAR CADA DOCUMENTO:
-         1. En Drive: clic derecho al PDF → Compartir → copiar enlace.
-            El enlace se ve así:
-            https://drive.google.com/file/d/AQUI_VA_EL_ID/view?usp=sharing
-         2. Copia SOLO el enlace completo que termina en /view y pégalo
-            en el href="..." de cada tarjeta.
-            (El modo /view abre el visor SIN botón de descarga si en Drive
-             desmarcaste "los lectores pueden descargar, imprimir y copiar".)
-         3. Duplica un bloque <article class="doc"> por cada PDF.
+         1. Sube el PDF al bucket de R2 (ver DESPLIEGUE.md):
+            npx wrangler r2 object put "documentos/mi-archivo.pdf" --file "docs/mi-archivo.pdf" --content-type application/pdf
+         2. Registra el documento en el mapa DOCS de visor.html
+            (id, archivo y título).
+         3. Duplica un bloque <article class="doc"> por cada PDF y
+            apunta su href a visor.html?doc=EL_ID_QUE_REGISTRASTE.
          ============================================================ -->
 
     <article class="doc">
       <span class="code">DOC-01</span>
       <h2>AREMA 2024 Portfolio of Trackwork and Plans Full Book</h2>
       <p>Planos y especificaciones de aparatos de vía de la AREMA, edición 2024.</p>
-      <a class="open" href="https://drive.google.com/file/d/1ivq5zwUcxy5oCkYi7-IRsjfHOGHilMOi/view" target="_blank" rel="noopener">
+      <a class="open" href="visor.html?doc=doc-01" target="_blank" rel="noopener">
         Abrir documento
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
@@ -441,7 +439,7 @@
       <span class="code">DOC-02</span>
       <h2>AREMA MRE 2025 Full Book</h2>
       <p>Manual de Ingeniería Ferroviaria (Manual for Railway Engineering) de la AREMA, edición 2025.</p>
-      <a class="open" href="https://drive.google.com/file/d/18DR0-zwLskh-E3V5yiaD2mauRs5lYG4l/view" target="_blank" rel="noopener">
+      <a class="open" href="visor.html?doc=doc-02" target="_blank" rel="noopener">
         Abrir documento
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
@@ -451,7 +449,7 @@
       <span class="code">DOC-XX</span>
       <h2>XXX</h2>
       <p>Descripción</p>
-      <a class="open" href="https://drive.google.com/file/d/PEGA_AQUI_EL_ID/view" target="_blank" rel="noopener">
+      <a class="open" href="visor.html?doc=PEGA_AQUI_EL_ID" target="_blank" rel="noopener">
         Abrir documento
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
@@ -461,7 +459,7 @@
       <span class="code">DOC-XX</span>
       <h2>XXX</h2>
       <p>Descripción</p>
-      <a class="open" href="https://drive.google.com/file/d/PEGA_AQUI_EL_ID/view" target="_blank" rel="noopener">
+      <a class="open" href="visor.html?doc=PEGA_AQUI_EL_ID" target="_blank" rel="noopener">
         Abrir documento
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
@@ -471,7 +469,7 @@
       <span class="code">DOC-XX</span>
       <h2>XXX</h2>
       <p>Descripción</p>
-      <a class="open" href="https://drive.google.com/file/d/PEGA_AQUI_EL_ID/view" target="_blank" rel="noopener">
+      <a class="open" href="visor.html?doc=PEGA_AQUI_EL_ID" target="_blank" rel="noopener">
         Abrir documento
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
@@ -481,7 +479,7 @@
       <span class="code">DOC-XX</span>
       <h2>XXX</h2>
       <p>Descripción</p>
-      <a class="open" href="https://drive.google.com/file/d/PEGA_AQUI_EL_ID/view" target="_blank" rel="noopener">
+      <a class="open" href="visor.html?doc=PEGA_AQUI_EL_ID" target="_blank" rel="noopener">
         Abrir documento
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
@@ -495,7 +493,7 @@
 <!-- ============================================================
      VISTA B: registro normativo (listado institucional)
      Para agregar un documento aquí, duplica un bloque <div class="b-row">
-     y pega el enlace de Drive en su href="...".
+     y apunta su href a visor.html?doc=EL_ID (mismo id que en Vista A).
      ============================================================ -->
 <div id="viewB" hidden>
   <div class="b-top">
@@ -537,7 +535,7 @@
           <div class="b-desc">Planos y especificaciones de aparatos de vía de la AREMA, edición 2024.</div>
           <div class="b-meta">PDF</div>
         </div>
-        <a class="b-open" href="https://drive.google.com/file/d/1ivq5zwUcxy5oCkYi7-IRsjfHOGHilMOi/view" target="_blank" rel="noopener">
+        <a class="b-open" href="visor.html?doc=doc-01" target="_blank" rel="noopener">
           Abrir
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
         </a>
@@ -550,7 +548,7 @@
           <div class="b-desc">Manual de Ingeniería Ferroviaria (Manual for Railway Engineering) de la AREMA, edición 2025.</div>
           <div class="b-meta">PDF</div>
         </div>
-        <a class="b-open" href="https://drive.google.com/file/d/18DR0-zwLskh-E3V5yiaD2mauRs5lYG4l/view" target="_blank" rel="noopener">
+        <a class="b-open" href="visor.html?doc=doc-02" target="_blank" rel="noopener">
           Abrir
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
         </a>
