@@ -365,7 +365,7 @@
   pageInput.addEventListener('change', () => renderPage(parseInt(pageInput.value, 10) || 1));
 
   function setZoom(mult){
-    const current = scale ?? parseFloat(zoomLabel.textContent) / 100 || 1;
+    const current = scale ?? (parseFloat(zoomLabel.textContent) / 100 || 1);
     scale = Math.min(Math.max(current * mult, 0.3), 4);
     renderPage(pageNum);
   }
