@@ -24,15 +24,15 @@ R2 pide registrar una tarjeta al activarse, pero no cobra dentro del límite.
 Desde la raíz de este proyecto:
 
 ```
-npx wrangler r2 bucket create repositorio-docs
+npx wrangler r2 bucket create documentos
 
-npx wrangler r2 object put "repositorio-docs/arema-2024-portfolio.pdf" --file "docs/AREMA 2024 Portfolio of Trackwork and Plans Full Book.pdf" --content-type application/pdf --remote
+npx wrangler r2 object put "documentos/AREMA-2024-Portfolio-of-Trackwork-and-Plans-Full-Book.pdf" --file "docs/AREMA 2024 Portfolio of Trackwork and Plans Full Book.pdf" --content-type application/pdf --remote
 
-npx wrangler r2 object put "repositorio-docs/arema-mre-2025.pdf" --file "docs/AREMA MRE 2025 Full Book.pdf" --content-type application/pdf --remote
+npx wrangler r2 object put "documentos/AREMA-MRE-2025-Full-Book.pdf" --file "docs/AREMA MRE 2025 Full Book.pdf" --content-type application/pdf --remote
 ```
 
-Los nombres `arema-2024-portfolio.pdf` y `arema-mre-2025.pdf` son los que espera
-el mapa `DOCS` de `public/visor.html`; si subes con otro nombre, actualiza ese mapa.
+Las llaves van en la RAÍZ del bucket y deben coincidir EXACTAMENTE con el campo
+`file` del mapa `DOCS` de `public/visor.html`; si subes con otro nombre, actualiza ese mapa.
 
 ## 3. Publicar el sitio
 
@@ -70,7 +70,7 @@ muestra el sitio y los documentos.
 1. Copia el PDF a `docs/` (queda solo local; git lo ignora).
 2. Súbelo a R2:
    ```
-   npx wrangler r2 object put "repositorio-docs/nombre-corto.pdf" --file "docs/Nombre Original.pdf" --content-type application/pdf --remote
+   npx wrangler r2 object put "documentos/Nombre-Del-Archivo.pdf" --file "docs/Nombre Original.pdf" --content-type application/pdf --remote
    ```
 3. Añade la entrada en el mapa `DOCS` de `public/visor.html`.
 4. Duplica una tarjeta en `public/index.html` (Vista A y Vista B) apuntando a
@@ -80,8 +80,8 @@ muestra el sitio y los documentos.
 ## Probar en local (opcional)
 
 ```
-npx wrangler r2 object put "repositorio-docs/arema-2024-portfolio.pdf" --file "docs/AREMA 2024 Portfolio of Trackwork and Plans Full Book.pdf" --content-type application/pdf --local
-npx wrangler pages dev --r2 DOCS=repositorio-docs
+npx wrangler r2 object put "documentos/AREMA-2024-Portfolio-of-Trackwork-and-Plans-Full-Book.pdf" --file "docs/AREMA 2024 Portfolio of Trackwork and Plans Full Book.pdf" --content-type application/pdf --local
+npx wrangler pages dev --r2 DOCS=documentos
 ```
 
 Abre http://localhost:8788 — usa una copia local del bucket (carpeta `.wrangler/`),
@@ -90,4 +90,4 @@ necesario porque `pages dev` no siempre toma el binding del wrangler.toml.)
 
 > Si al desplegar el visor diera "No se pudo cargar el documento", revisa que el
 > binding exista en el panel: proyecto de Pages → **Settings → Bindings →
-> R2 bucket**, variable `DOCS` → bucket `repositorio-docs`, y vuelve a desplegar.
+> R2 bucket**, variable `DOCS` → bucket `documentos`, y vuelve a desplegar.
