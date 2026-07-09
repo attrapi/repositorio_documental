@@ -115,31 +115,7 @@
       linear-gradient(var(--signal),var(--signal)) 19px 0/2px 100% no-repeat,
       repeating-linear-gradient(180deg, var(--steel) 0 5px, transparent 5px 22px) 4px 0/20px 100% no-repeat;
   }
-
-  /* ---- vía moderna (alta velocidad): placa de concreto continua,
-          sin durmientes, rieles dorados. Mismo tamaño que la clásica. ---- */
-  .b-track-m{
-    width:28px;
-    flex:none;
-    display:flex;
-    flex-direction:column;
-    opacity:.9;
-  }
-  .b-switch-m{
-    width:28px;
-    height:36px;
-    flex:none;
-    display:block;
-  }
-  .b-rail-m{
-    flex:1;
-    background:
-      linear-gradient(var(--gold),var(--gold)) 7px 0/2px 100% no-repeat,
-      linear-gradient(var(--gold),var(--gold)) 19px 0/2px 100% no-repeat,
-      repeating-linear-gradient(180deg, rgba(61,85,102,.28) 0 2px, transparent 2px 46px) 4px 0/20px 100% no-repeat,
-      linear-gradient(180deg,#E2E8EB,#DCE3E7) 2px 0/24px 100% no-repeat;
-  }
-  @media (max-width:640px){.b-track,.b-track-m{display:none}}
+  @media (max-width:640px){.b-track{display:none}}
 
   .b-card{
     background:#fff;
@@ -250,18 +226,6 @@
 
   <div class="b-list">
     <div class="b-flex">
-      <div class="b-track-m" aria-hidden="true">
-        <svg class="b-switch-m" viewBox="0 0 28 36">
-          <!-- placa de concreto: arranca junto con el tope -->
-          <rect x="2" y="5" width="24" height="31" fill="#DFE5E9"/>
-          <!-- tope moderno -->
-          <rect x="2" y="0" width="24" height="5" rx="2.5" fill="#9A7B33"/>
-          <!-- rieles -->
-          <path d="M8 5 V36" fill="none" stroke="#9A7B33" stroke-width="2"/>
-          <path d="M20 5 V36" fill="none" stroke="#9A7B33" stroke-width="2"/>
-        </svg>
-        <div class="b-rail-m"></div>
-      </div>
       <div class="b-track" aria-hidden="true">
         <svg class="b-switch" viewBox="0 0 28 36">
           <!-- tope de vía: aquí inicia la línea -->
