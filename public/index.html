@@ -33,178 +33,7 @@
     -webkit-font-smoothing:antialiased;
   }
 
-  /* ---- riel: vía vista desde arriba (durmientes + dos rieles) ---- */
-  .rail{
-    height:16px;
-    background:
-      linear-gradient(var(--signal),var(--signal)) left top 3px/100% 2px no-repeat,
-      linear-gradient(var(--signal),var(--signal)) left bottom 3px/100% 2px no-repeat,
-      repeating-linear-gradient(90deg, var(--steel) 0 5px, transparent 5px 22px);
-    opacity:.9;
-  }
-
-  /* ---- encabezado ---- */
-  header{
-    max-width:1080px;
-    margin:0 auto;
-    padding:34px 28px 26px;
-  }
-  .agency{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--steel);
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-  .agency .dot{width:6px;height:6px;background:var(--signal);border-radius:50%;flex:none}
-  h1{
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:600;
-    font-size:clamp(26px,4vw,40px);
-    line-height:1.1;
-    letter-spacing:-.02em;
-    margin:14px 0 10px;
-  }
-  .lede{
-    max-width:60ch;
-    color:var(--steel);
-    font-size:15.5px;
-  }
-
-  /* ---- barra utilitaria ---- */
-  .bar{
-    max-width:1080px;
-    margin:0 auto;
-    padding:0 28px;
-    display:flex;
-    gap:14px;
-    align-items:center;
-    flex-wrap:wrap;
-    justify-content:space-between;
-  }
-  .note{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11.5px;
-    letter-spacing:.05em;
-    color:var(--signal-dk);
-    background:rgba(30,110,82,.08);
-    border:1px solid rgba(30,110,82,.22);
-    padding:7px 12px;
-    border-radius:100px;
-  }
-  .note svg{width:14px;height:14px;flex:none}
-  .search{
-    flex:1;
-    min-width:220px;
-    max-width:340px;
-    position:relative;
-  }
-  .search input{
-    width:100%;
-    font-family:'Inter',sans-serif;
-    font-size:14px;
-    color:var(--ink);
-    padding:10px 14px 10px 38px;
-    border:1px solid var(--line);
-    border-radius:100px;
-    background:var(--paper);
-    outline:none;
-    transition:border-color .15s;
-  }
-  .search input:focus{border-color:var(--signal)}
-  .search svg{
-    position:absolute;left:13px;top:50%;transform:translateY(-50%);
-    width:16px;height:16px;color:var(--muted);
-  }
-
-  /* ---- rejilla de documentos ---- */
-  main{max-width:1080px;margin:0 auto;padding:26px 28px 60px}
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:16px;
-    margin-top:20px;
-  }
-  @media (max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
-  @media (max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
-  @media (max-width:520px){.grid{grid-template-columns:1fr}}
-  .doc{
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    background:var(--paper);
-    padding:22px 22px 20px;
-    display:flex;
-    flex-direction:column;
-    transition:border-color .18s, transform .18s, box-shadow .18s;
-  }
-  .doc:hover{
-    border-color:var(--signal);
-    transform:translateY(-2px);
-    box-shadow:0 8px 24px -14px rgba(23,36,46,.35);
-  }
-  .doc .code{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    letter-spacing:.1em;
-    color:var(--signal-dk);
-    text-transform:uppercase;
-  }
-  .doc h2{
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:600;
-    font-size:18px;
-    line-height:1.25;
-    letter-spacing:-.01em;
-    margin:10px 0 8px;
-  }
-  .doc p{
-    font-size:13.5px;
-    color:var(--steel);
-    flex:1;
-    margin-bottom:18px;
-  }
-  .doc .meta{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11px;
-    color:var(--muted);
-    margin-bottom:14px;
-  }
-  .open{
-    align-self:flex-start;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:500;
-    font-size:14px;
-    color:var(--paper);
-    background:var(--signal);
-    padding:9px 16px;
-    border-radius:7px;
-    text-decoration:none;
-    transition:background .15s;
-  }
-  .open:hover{background:var(--signal-dk)}
-  .open svg{width:15px;height:15px;transition:transform .15s}
-  .open:hover svg{transform:translateX(3px)}
-
-  .empty{
-    grid-column:1/-1;
-    text-align:center;
-    color:var(--muted);
-    font-size:14px;
-    padding:40px 0;
-    display:none;
-  }
-
-  /* ================= VISTA B: registro normativo ================= */
+  /* ================= registro normativo ================= */
   #viewB{
     min-height:100vh;
     background:var(--mist);
@@ -265,7 +94,7 @@
   .b-flex{display:flex;gap:18px;align-items:stretch}
   .b-flex .b-card{flex:1;min-width:0}
 
-  /* ---- vía vertical: cambio de vía + riel a lo largo del listado ---- */
+  /* ---- vía clásica: cambio de vía + riel con durmientes ---- */
   .b-track{
     width:28px;
     flex:none;
@@ -286,7 +115,32 @@
       linear-gradient(var(--signal),var(--signal)) 19px 0/2px 100% no-repeat,
       repeating-linear-gradient(180deg, var(--steel) 0 5px, transparent 5px 22px) 4px 0/20px 100% no-repeat;
   }
-  @media (max-width:640px){.b-track{display:none}}
+
+  /* ---- vía moderna (alta velocidad): placa de concreto continua,
+          sin durmientes, rieles dorados. Mismo tamaño que la clásica. ---- */
+  .b-track-m{
+    width:28px;
+    flex:none;
+    display:flex;
+    flex-direction:column;
+    opacity:.9;
+  }
+  .b-switch-m{
+    width:28px;
+    height:36px;
+    flex:none;
+    display:block;
+  }
+  .b-rail-m{
+    flex:1;
+    background:
+      linear-gradient(var(--gold),var(--gold)) 7px 0/2px 100% no-repeat,
+      linear-gradient(var(--gold),var(--gold)) 19px 0/2px 100% no-repeat,
+      repeating-linear-gradient(180deg, rgba(61,85,102,.28) 0 2px, transparent 2px 46px) 4px 0/20px 100% no-repeat,
+      linear-gradient(180deg,#E2E8EB,#DCE3E7) 2px 0/24px 100% no-repeat;
+  }
+  @media (max-width:640px){.b-track,.b-track-m{display:none}}
+
   .b-card{
     background:#fff;
     border:1px solid var(--line);
@@ -354,30 +208,6 @@
     .b-open{justify-self:start}
   }
 
-  /* ---- botón flotante para alternar vistas ---- */
-  #viewToggle{
-    position:fixed;
-    right:20px;
-    bottom:20px;
-    z-index:50;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:500;
-    font-size:13.5px;
-    color:#fff;
-    background:var(--ink);
-    border:none;
-    cursor:pointer;
-    padding:11px 18px;
-    border-radius:100px;
-    box-shadow:0 10px 26px -10px rgba(23,36,46,.55);
-    transition:background .15s;
-  }
-  #viewToggle:hover{background:var(--steel)}
-  #viewToggle svg{width:15px;height:15px}
-
   /* focus visible accesible */
   a:focus-visible, input:focus-visible{
     outline:2px solid var(--focus);
@@ -387,115 +217,21 @@
   @media (prefers-reduced-motion:reduce){
     *{transition:none!important;animation:none!important;scroll-behavior:auto}
   }
-  @media (max-width:520px){
-    header{padding:26px 20px 20px}
-    .bar,main{padding-left:20px;padding-right:20px}
-  }
 </style>
 </head>
 <body>
-<div id="viewA">
-<div class="rail" aria-hidden="true"></div>
-
-<header>
-  <div class="agency">
-    <span class="dot"></span>
-    Agencia de Trenes y Transporte Público Integrado · SPAC
-  </div>
-  <h1>Repositorio Normativo</h1>
-</header>
-
-<div class="bar">
-  <div class="search">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-    <input type="search" id="q" placeholder="Buscar documento…" aria-label="Buscar documento">
-  </div>
-</div>
-
-<main>
-  <div class="grid" id="grid">
-
-    <!-- ============================================================
-         CÓMO AGREGAR CADA DOCUMENTO:
-         1. Sube el PDF al bucket de R2 (ver DESPLIEGUE.md):
-            npx wrangler r2 object put "documentos/mi-archivo.pdf" --file "docs/mi-archivo.pdf" --content-type application/pdf
-         2. Registra el documento en el mapa DOCS de visor.html
-            (id, archivo y título).
-         3. Duplica un bloque <article class="doc"> por cada PDF y
-            apunta su href a visor.html?doc=EL_ID_QUE_REGISTRASTE.
-         ============================================================ -->
-
-    <article class="doc">
-      <span class="code">DOC-01</span>
-      <h2>AREMA 2024 Portfolio of Trackwork and Plans Full Book</h2>
-      <p>Planos y especificaciones de aparatos de vía de la AREMA, edición 2024.</p>
-      <a class="open" href="visor.html?doc=doc-01" target="_blank" rel="noopener">
-        Abrir documento
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </article>
-
-    <article class="doc">
-      <span class="code">DOC-02</span>
-      <h2>AREMA MRE 2025 Full Book</h2>
-      <p>Manual de Ingeniería Ferroviaria (Manual for Railway Engineering) de la AREMA, edición 2025.</p>
-      <a class="open" href="visor.html?doc=doc-02" target="_blank" rel="noopener">
-        Abrir documento
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </article>
-
-    <article class="doc">
-      <span class="code">DOC-XX</span>
-      <h2>XXX</h2>
-      <p>Descripción</p>
-      <a class="open" href="visor.html?doc=PEGA_AQUI_EL_ID" target="_blank" rel="noopener">
-        Abrir documento
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </article>
-
-    <article class="doc">
-      <span class="code">DOC-XX</span>
-      <h2>XXX</h2>
-      <p>Descripción</p>
-      <a class="open" href="visor.html?doc=PEGA_AQUI_EL_ID" target="_blank" rel="noopener">
-        Abrir documento
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </article>
-
-    <article class="doc">
-      <span class="code">DOC-XX</span>
-      <h2>XXX</h2>
-      <p>Descripción</p>
-      <a class="open" href="visor.html?doc=PEGA_AQUI_EL_ID" target="_blank" rel="noopener">
-        Abrir documento
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </article>
-
-    <article class="doc">
-      <span class="code">DOC-XX</span>
-      <h2>XXX</h2>
-      <p>Descripción</p>
-      <a class="open" href="visor.html?doc=PEGA_AQUI_EL_ID" target="_blank" rel="noopener">
-        Abrir documento
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </article>
-
-    <div class="empty" id="empty">No hay documentos que coincidan con la búsqueda.</div>
-  </div>
-</main>
-</div><!-- /viewA -->
 
 <!-- ============================================================
-     VISTA B: registro normativo (listado institucional)
-     Para agregar un documento aquí, duplica un bloque <div class="b-row">
-     y apunta su href a visor.html?doc=EL_ID (mismo id que en Vista A).
+     CÓMO AGREGAR UN DOCUMENTO:
+     1. Sube el PDF al bucket de R2 (ver DESPLIEGUE.md):
+        npx wrangler r2 object put "documentos/Nombre-Del-Archivo.pdf" --file "docs/Nombre Original.pdf" --content-type application/pdf --remote
+     2. Registra el documento en el mapa DOCS de visor.html
+        (id, archivo con el nombre EXACTO subido a R2, y título).
+     3. Duplica un bloque <div class="b-row"> aquí abajo y apunta su
+        href a visor.html?doc=EL_ID_QUE_REGISTRASTE.
+     4. Publica: npx wrangler pages deploy
      ============================================================ -->
-<div id="viewB" hidden>
+<div id="viewB">
   <div class="b-top">
     <div class="b-top-inner">
       <div class="b-agency">Agencia de Trenes y Transporte Público Integrado · SPAC</div>
@@ -514,6 +250,18 @@
 
   <div class="b-list">
     <div class="b-flex">
+      <div class="b-track-m" aria-hidden="true">
+        <svg class="b-switch-m" viewBox="0 0 28 36">
+          <!-- placa de concreto: arranca junto con el tope -->
+          <rect x="2" y="5" width="24" height="31" fill="#DFE5E9"/>
+          <!-- tope moderno -->
+          <rect x="2" y="0" width="24" height="5" rx="2.5" fill="#9A7B33"/>
+          <!-- rieles -->
+          <path d="M8 5 V36" fill="none" stroke="#9A7B33" stroke-width="2"/>
+          <path d="M20 5 V36" fill="none" stroke="#9A7B33" stroke-width="2"/>
+        </svg>
+        <div class="b-rail-m"></div>
+      </div>
       <div class="b-track" aria-hidden="true">
         <svg class="b-switch" viewBox="0 0 28 36">
           <!-- tope de vía: aquí inicia la línea -->
@@ -560,44 +308,8 @@
   </div>
 </div><!-- /viewB -->
 
-<button id="viewToggle" type="button" aria-label="Cambiar diseño de la página">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15.5 6.2M3 12a9 9 0 0 1 15.5-6.2M3 18v-4h4M21 6v4h-4"/></svg>
-  <span id="viewToggleLabel">Vista registro</span>
-</button>
-
 <script>
-  // Buscador simple por título/código
-  const q = document.getElementById('q');
-  const docs = [...document.querySelectorAll('.doc')];
-  const empty = document.getElementById('empty');
-  q.addEventListener('input', () => {
-    const t = q.value.trim().toLowerCase();
-    let visibles = 0;
-    docs.forEach(d => {
-      const hit = d.textContent.toLowerCase().includes(t);
-      d.style.display = hit ? '' : 'none';
-      if (hit) visibles++;
-    });
-    empty.style.display = visibles ? 'none' : 'block';
-  });
-
-  // ---- Alternar entre Vista A (tarjetas) y Vista B (registro) ----
-  const viewA = document.getElementById('viewA');
-  const viewB = document.getElementById('viewB');
-  const toggleBtn = document.getElementById('viewToggle');
-  const toggleLabel = document.getElementById('viewToggleLabel');
-  function setView(v){
-    viewA.hidden = v === 'B';
-    viewB.hidden = v !== 'B';
-    toggleLabel.textContent = v === 'B' ? 'Vista tarjetas' : 'Vista registro';
-    try { localStorage.setItem('vistaRepo', v); } catch(e) {}
-  }
-  toggleBtn.addEventListener('click', () => setView(viewA.hidden ? 'A' : 'B'));
-  let vistaGuardada = 'A';
-  try { vistaGuardada = localStorage.getItem('vistaRepo') || 'A'; } catch(e) {}
-  setView(vistaGuardada);
-
-  // ---- Buscador y contador de la Vista B ----
+  // Buscador y contador del registro
   const q2 = document.getElementById('q2');
   const rows = [...document.querySelectorAll('.b-row')];
   const bEmpty = document.getElementById('bEmpty');
