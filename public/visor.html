@@ -208,9 +208,6 @@
     <button id="zoomIn" type="button" aria-label="Acercar" disabled>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
     </button>
-    <button id="fitWidth" type="button" aria-label="Ajustar al ancho" title="Ajustar al ancho" disabled>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></svg>
-    </button>
   </div>
 </div>
 
@@ -257,7 +254,7 @@
   const pageInput = document.getElementById('pageInput');
   const pageTotal = document.getElementById('pageTotal');
   const zoomLabel = document.getElementById('zoomLabel');
-  const buttons = ['prev','next','zoomOut','zoomIn','fitWidth'].reduce(
+  const buttons = ['prev','next','zoomOut','zoomIn'].reduce(
     (o, id) => (o[id] = document.getElementById(id), o), {});
 
   function fail(msg){
@@ -371,7 +368,6 @@
   }
   buttons.zoomIn.addEventListener('click', () => setZoom(1.2));
   buttons.zoomOut.addEventListener('click', () => setZoom(1 / 1.2));
-  buttons.fitWidth.addEventListener('click', () => { scale = null; renderPage(pageNum); });
 
   window.addEventListener('resize', () => {
     if (scale === null && pdf) renderPage(pageNum);
