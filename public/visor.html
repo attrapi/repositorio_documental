@@ -38,6 +38,7 @@
     gap:14px;
     padding:10px 16px;
     flex-wrap:wrap;
+    flex:none;
   }
   .back{
     display:inline-flex;
@@ -93,7 +94,9 @@
   }
   .controls button:hover{background:rgba(255,255,255,.2)}
   .controls button:disabled{opacity:.35;cursor:default}
+  .controls button.on{background:var(--signal);border-color:var(--signal)}
   .controls button svg{width:15px;height:15px}
+  .sep{width:1px;height:22px;background:rgba(255,255,255,.18)}
   .pagebox{
     display:inline-flex;
     align-items:center;
@@ -123,6 +126,116 @@
     text-align:center;
   }
 
+  /* ---- cuerpo: panel lateral + documento ---- */
+  .body{flex:1;display:flex;min-height:0}
+
+  .panel{
+    width:330px;
+    flex:none;
+    background:#fff;
+    border-right:1px solid var(--line);
+    display:none;
+    flex-direction:column;
+    min-height:0;
+  }
+  .panel.open{display:flex}
+  .tabs{display:flex;border-bottom:1px solid var(--line);flex:none}
+  .tabs button{
+    flex:1;
+    padding:11px 8px;
+    background:none;
+    border:none;
+    border-bottom:2px solid transparent;
+    font-family:inherit;
+    font-size:12.5px;
+    font-weight:500;
+    color:var(--steel);
+    cursor:pointer;
+  }
+  .tabs button.on{color:var(--signal);border-bottom-color:var(--signal)}
+  .tabpane{display:none;flex:1;flex-direction:column;min-height:0}
+  .tabpane.on{display:flex}
+
+  /* búsqueda */
+  .searchbox{padding:12px;border-bottom:1px solid var(--line);flex:none}
+  .searchfield{position:relative;display:flex;align-items:center}
+  .searchfield > svg{
+    position:absolute;left:10px;width:14px;height:14px;
+    color:var(--muted);pointer-events:none;
+  }
+  .searchfield input{
+    width:100%;
+    padding:9px 30px 9px 31px;
+    font-family:inherit;
+    font-size:13.5px;
+    color:var(--ink);
+    background:var(--mist);
+    border:1px solid var(--line);
+    border-radius:8px;
+    outline:none;
+  }
+  .searchfield input:focus{border-color:var(--gold);background:#fff}
+  .searchfield input::-webkit-search-cancel-button{display:none}
+  .searchfield .clear{
+    position:absolute;right:6px;
+    width:20px;height:20px;
+    display:none;align-items:center;justify-content:center;
+    border:none;background:none;color:var(--muted);
+    cursor:pointer;font-size:17px;line-height:1;border-radius:4px;
+  }
+  .searchfield .clear:hover{color:var(--signal)}
+  .searchfield.filled .clear{display:flex}
+  .searchmeta{
+    margin-top:9px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--steel);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-height:15px;
+  }
+  .bar{
+    flex:1;height:3px;border-radius:2px;background:var(--line);
+    overflow:hidden;display:none;
+  }
+  .bar.on{display:block}
+  .bar i{display:block;height:100%;background:var(--gold);width:0;transition:width .2s}
+
+  .results{flex:1;overflow:auto;padding:4px 0 14px}
+  .result{
+    display:block;width:100%;text-align:left;
+    padding:10px 14px;
+    background:none;border:none;border-bottom:1px solid var(--mist);
+    font-family:inherit;cursor:pointer;
+  }
+  .result:hover{background:var(--mist)}
+  .result.on{background:#F6EEF0;box-shadow:inset 3px 0 0 var(--signal)}
+  .result .pg{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--gold);display:block;margin-bottom:3px;
+  }
+  .result .snip{font-size:12.5px;line-height:1.5;color:var(--steel);display:block}
+  .result .snip mark{background:#FBE9A7;color:var(--ink);border-radius:2px;padding:0 1px}
+  .empty{padding:22px 16px;font-size:13px;color:var(--steel);line-height:1.55}
+  .empty code{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--signal)}
+
+  /* índice del documento */
+  .outline{flex:1;overflow:auto;padding:8px 0 16px}
+  .outline button{
+    display:block;width:100%;text-align:left;
+    padding:7px 14px;
+    background:none;border:none;
+    font-family:inherit;font-size:12.5px;line-height:1.45;
+    color:var(--steel);cursor:pointer;
+  }
+  .outline button:hover{background:var(--mist);color:var(--ink)}
+  .outline button.lvl0{font-weight:500;color:var(--ink)}
+  .outline button.lvl1{padding-left:30px}
+  .outline button.lvl2{padding-left:46px;font-size:12px}
+  .outline button.lvl3{padding-left:62px;font-size:12px}
+
   /* ---- área del documento ---- */
   .stage{
     flex:1;
@@ -131,12 +244,94 @@
     justify-content:center;
     align-items:flex-start;
     padding:24px;
+    min-width:0;
   }
-  canvas{
+  .pagewrap{
+    position:relative;
+    display:none;
     background:#fff;
     box-shadow:0 12px 34px -16px rgba(23,36,46,.45);
     border-radius:3px;
-    display:none;
+    flex:none;
+  }
+  .pagewrap.ready{display:block}
+  /* Mientras llega la página siguiente se atenúa la actual en lugar de
+     dejarla en blanco. El retardo evita el parpadeo en cambios rápidos. */
+  .pagewrap{transition:opacity .12s}
+  .pagewrap.cargando{opacity:.45;transition:opacity .2s .3s}
+  canvas{display:block;border-radius:3px}
+
+  /* aviso flotante de un tropiezo puntual */
+  .aviso{
+    position:fixed;
+    top:66px;left:50%;
+    transform:translate(-50%,-12px);
+    z-index:20;
+    max-width:min(90%,44ch);
+    padding:9px 15px;
+    background:var(--ink);
+    color:#fff;
+    font-size:13px;
+    line-height:1.4;
+    border-radius:8px;
+    box-shadow:0 10px 26px -12px rgba(23,36,46,.6);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .18s, transform .18s;
+  }
+  .aviso.visible{opacity:1;transform:translate(-50%,0)}
+
+  /* capa de texto de pdf.js: permite seleccionar y copiar */
+  .textLayer{
+    position:absolute;
+    text-align:initial;
+    inset:0;
+    overflow:clip;
+    line-height:1;
+    text-size-adjust:none;
+    forced-color-adjust:none;
+    transform-origin:0 0;
+    caret-color:CanvasText;
+    z-index:1;
+  }
+  .textLayer :is(span,br){
+    color:transparent;
+    position:absolute;
+    white-space:pre;
+    cursor:text;
+    transform-origin:0% 0%;
+  }
+  .textLayer span.markedContent{top:0;height:0}
+  .textLayer ::selection{background:rgba(105,28,50,.28)}
+  .textLayer br::selection{color:transparent}
+  .textLayer .endOfContent{
+    display:block;position:absolute;inset:100% 0 0;
+    z-index:-1;cursor:default;user-select:none;
+  }
+
+  /* resaltado de coincidencias */
+  .markLayer{position:absolute;inset:0;z-index:0;pointer-events:none}
+  .markLayer i{
+    position:absolute;
+    background:rgba(251,214,74,.45);
+    border-radius:2px;
+    mix-blend-mode:multiply;
+  }
+  .markLayer i.on{background:rgba(230,138,0,.55);box-shadow:0 0 0 1px rgba(154,123,51,.7)}
+
+  /* enlaces del PDF */
+  .linkLayer{position:absolute;inset:0;z-index:2}
+  .linkLayer a{
+    position:absolute;
+    display:block;
+    border-radius:2px;
+    /* Discretos: se insinúan con un subrayado y se encienden al pasar encima. */
+    box-shadow:inset 0 -1px 0 rgba(105,28,50,.22);
+    transition:background .12s;
+  }
+  .linkLayer a:hover{
+    background:rgba(154,123,51,.28);
+    box-shadow:inset 0 -1px 0 rgba(105,28,50,.5);
   }
 
   /* ---- estados de carga / error ---- */
@@ -173,9 +368,14 @@
   @media (prefers-reduced-motion:reduce){
     *{transition:none!important;animation:none!important}
   }
+  @media (max-width:760px){
+    .body{position:relative}
+    .panel{position:absolute;top:0;bottom:0;left:0;z-index:9;box-shadow:0 0 40px rgba(23,36,46,.25)}
+  }
   @media (max-width:560px){
     .doc-title{order:3;flex-basis:100%}
     .stage{padding:12px}
+    .panel{width:100%}
   }
 </style>
 </head>
@@ -191,6 +391,13 @@
     <span id="docTitle">Cargando…</span>
   </div>
   <div class="controls">
+    <button id="toggleBuscar" type="button" aria-label="Buscar en el documento" title="Buscar en el documento (Ctrl+F)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    </button>
+    <button id="toggleIndice" type="button" aria-label="Índice del documento" title="Índice del documento">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+    </button>
+    <span class="sep"></span>
     <button id="prev" type="button" aria-label="Página anterior" disabled>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
@@ -201,6 +408,7 @@
     <button id="next" type="button" aria-label="Página siguiente" disabled>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
     </button>
+    <span class="sep"></span>
     <button id="zoomOut" type="button" aria-label="Alejar" disabled>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>
     </button>
@@ -211,17 +419,56 @@
   </div>
 </div>
 
-<div class="stage" id="stage">
-  <div class="status" id="status">
-    <div class="spinner"></div>
-    Preparando el documento…
-    <span class="pct" id="statusPct"></span>
+<div class="body">
+  <aside class="panel" id="panel">
+    <div class="tabs">
+      <button id="tabBuscar" type="button" class="on">Búsqueda</button>
+      <button id="tabIndice" type="button">Índice</button>
+    </div>
+
+    <div class="tabpane on" id="paneBuscar">
+      <div class="searchbox">
+        <div class="searchfield" id="searchField">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Buscar palabra o frase…" autocomplete="off" spellcheck="false" enterkeyhint="search">
+          <button class="clear" id="qClear" type="button" aria-label="Limpiar búsqueda">×</button>
+        </div>
+        <div class="searchmeta">
+          <span id="searchInfo"></span>
+          <span class="bar" id="searchBar"><i></i></span>
+        </div>
+      </div>
+      <div class="results" id="results">
+        <p class="empty">Escribe una palabra o frase para buscarla en todo el documento. No distingue mayúsculas ni acentos.</p>
+      </div>
+    </div>
+
+    <div class="tabpane" id="paneIndice">
+      <div class="outline" id="outline">
+        <p class="empty">Cargando el índice…</p>
+      </div>
+    </div>
+  </aside>
+
+  <div class="stage" id="stage">
+    <div class="status" id="status">
+      <div class="spinner"></div>
+      Preparando el documento…
+      <span class="pct" id="statusPct"></span>
+    </div>
+    <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+    <div class="pagewrap" id="pagewrap">
+      <canvas id="canvas"></canvas>
+      <div class="markLayer" id="markLayer"></div>
+      <div class="textLayer" id="textLayer"></div>
+      <div class="linkLayer" id="linkLayer"></div>
+    </div>
   </div>
-  <canvas id="canvas"></canvas>
 </div>
 
 <script type="module">
   import * as pdfjsLib from './vendor/pdfjs/pdf.min.mjs';
+  import { TextLayer } from './vendor/pdfjs/pdf.min.mjs';
   pdfjsLib.GlobalWorkerOptions.workerSrc = './vendor/pdfjs/pdf.worker.min.mjs';
 
   // ============================================================
@@ -229,6 +476,8 @@
   // id → { file: nombre del objeto en R2 (llave exacta en la RAÍZ del bucket;
   //         el worker lo sirve en /docs/<archivo>), code, title }
   // Para agregar uno nuevo: sube el PDF a R2 y añade una línea aquí.
+  // El índice de búsqueda se genera aparte con `node tools/indexar.mjs`;
+  // el visor lo lee de indice/<archivo sin .pdf>/.
   // ============================================================
   const DOCS = {
     'doc-01': {
@@ -244,43 +493,55 @@
   };
 
   const params = new URLSearchParams(location.search);
+  const paginaInicial = parseInt(params.get('page'), 10) || 1;
   const entry = DOCS[params.get('doc')] ||
     (params.get('f') ? { file: params.get('f'), code: 'Documento', title: params.get('t') || params.get('f') } : null);
 
-  const statusEl = document.getElementById('status');
-  const statusPct = document.getElementById('statusPct');
-  const canvas = document.getElementById('canvas');
-  const stage = document.getElementById('stage');
-  const pageInput = document.getElementById('pageInput');
-  const pageTotal = document.getElementById('pageTotal');
-  const zoomLabel = document.getElementById('zoomLabel');
+  const $ = (id) => document.getElementById(id);
+  const statusEl = $('status');
+  const statusPct = $('statusPct');
+  const canvas = $('canvas');
+  const stage = $('stage');
+  const pagewrap = $('pagewrap');
+  const textLayerDiv = $('textLayer');
+  const markLayer = $('markLayer');
+  const linkLayer = $('linkLayer');
+  const pageInput = $('pageInput');
+  const pageTotal = $('pageTotal');
+  const zoomLabel = $('zoomLabel');
+  const panel = $('panel');
+  const qInput = $('q');
   const buttons = ['prev','next','zoomOut','zoomIn'].reduce(
-    (o, id) => (o[id] = document.getElementById(id), o), {});
+    (o, id) => (o[id] = $(id), o), {});
 
+  // Falla del documento entero: no hay nada que mostrar.
   function fail(msg){
     statusEl.classList.add('error');
-    statusEl.innerHTML = '';
-    statusEl.append(msg);
+    statusEl.textContent = msg;
     statusEl.style.display = '';
-    canvas.style.display = 'none';
+    pagewrap.classList.remove('ready');
   }
 
-  if (!entry) {
-    fail('No se indicó qué documento abrir. Regresa al repositorio y elige uno.');
-  } else {
-    document.getElementById('docCode').textContent = entry.code;
-    document.getElementById('docTitle').textContent = entry.title;
-    document.title = entry.title + ' · SPAC';
-    abrir(entry);
+  // Tropiezo de una página suelta: se avisa sin borrar lo que ya se ve,
+  // para no dejar al usuario frente a una hoja en blanco.
+  let avisoTemporizador;
+  function avisar(msg){
+    const caja = $('aviso');
+    caja.textContent = msg;
+    caja.classList.add('visible');
+    clearTimeout(avisoTemporizador);
+    avisoTemporizador = setTimeout(() => caja.classList.remove('visible'), 6000);
   }
 
   let pdf = null;
   let pageNum = 1;
   let scale = null;          // null = ajustar al ancho
   let renderTask = null;
-  let rendering = false;
-  let pendingPage = null;
+  let textTask = null;
 
+  // ============================================================
+  // Carga del documento
+  // ============================================================
   async function abrir(entry){
     try {
       const task = pdfjsLib.getDocument({
@@ -299,7 +560,16 @@
       pageInput.max = pdf.numPages;
       pageInput.disabled = false;
       Object.values(buttons).forEach(b => b.disabled = false);
-      await renderPage(1);
+      await renderPage(paginaInicial);
+      cargarIndice();            // marcadores internos del PDF
+      await prepararBusqueda();  // manifiesto del índice de texto
+      const q = params.get('q');
+      if (q) {
+        qInput.value = q;
+        $('searchField').classList.add('filled');
+        abrirPanel('buscar');
+        buscar(q);
+      }
     } catch (e) {
       console.error(e);
       fail('No se pudo cargar el documento. Verifica tu conexión o que el archivo exista en el repositorio.');
@@ -312,48 +582,173 @@
     return Math.min(Math.max(available / viewport.width, 0.3), 4);
   }
 
-  async function renderPage(num){
+  // ============================================================
+  // Dibujo de la página: lienzo + texto + enlaces + resaltado
+  //
+  // La página se pinta SIEMPRE en un lienzo fuera de pantalla y solo se
+  // vuelca al visible cuando terminó. Antes se dibujaba directo sobre el
+  // lienzo visible, y como asignarle `width` lo borra, cambiar de página
+  // antes de que acabara la anterior dejaba la hoja en blanco sin que
+  // nadie volviera a pintarla.
+  //
+  // Cada petición lleva un número de turno: si mientras se prepara una
+  // página llega otra, la vieja se abandona en silencio y solo la última
+  // toca la pantalla. Así los clics seguidos en el índice no se estorban.
+  // ============================================================
+  const lienzoOculto = document.createElement('canvas');
+  let turnoRender = 0;
+  let reintentos = 0;
+
+  async function renderPage(num, opts = {}){
     if (!pdf) return;
     num = Math.min(Math.max(1, num), pdf.numPages);
-    if (rendering) { pendingPage = num; renderTask?.cancel(); return; }
-    rendering = true;
+    const turno = ++turnoRender;
+    const vigente = () => turno === turnoRender;
+
     pageNum = num;
     pageInput.value = num;
+    // Refleja la página en la URL para poder copiar/compartir el enlace exacto.
+    const url = new URL(location);
+    url.searchParams.set('page', num);
+    history.replaceState(null, '', url);
     buttons.prev.disabled = num <= 1;
     buttons.next.disabled = num >= pdf.numPages;
 
+    // Suelta lo que estuviera dibujándose; su turno ya venció.
+    renderTask?.cancel();
+    textTask?.cancel();
+    pagewrap.classList.add('cargando');
+
     try {
       const page = await pdf.getPage(num);
+      if (!vigente()) return;
+
       const s = scale ?? fitWidthScale(page);
-      zoomLabel.textContent = Math.round(s * 100) + ' %';
       const dpr = window.devicePixelRatio || 1;
       const viewport = page.getViewport({ scale: s });
-      canvas.width = Math.floor(viewport.width * dpr);
-      canvas.height = Math.floor(viewport.height * dpr);
-      canvas.style.width = Math.floor(viewport.width) + 'px';
-      canvas.style.height = Math.floor(viewport.height) + 'px';
+      const w = Math.floor(viewport.width), h = Math.floor(viewport.height);
+      lienzoOculto.width = Math.floor(viewport.width * dpr);
+      lienzoOculto.height = Math.floor(viewport.height * dpr);
 
-      renderTask = page.render({
-        canvasContext: canvas.getContext('2d'),
+      const tarea = page.render({
+        canvasContext: lienzoOculto.getContext('2d'),
         viewport,
         transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : undefined,
       });
-      await renderTask.promise;
+      renderTask = tarea;
+      await tarea.promise;
+      if (!vigente()) return;
+
+      // Recién ahora se toca lo que el usuario está viendo.
+      canvas.width = lienzoOculto.width;
+      canvas.height = lienzoOculto.height;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      canvas.getContext('2d').drawImage(lienzoOculto, 0, 0);
+      pagewrap.style.width = w + 'px';
+      pagewrap.style.height = h + 'px';
+      // pdf.js coloca la capa de texto a partir de esta variable.
+      pagewrap.style.setProperty('--scale-factor', s);
+      zoomLabel.textContent = Math.round(s * 100) + ' %';
       statusEl.style.display = 'none';
-      canvas.style.display = 'block';
+      pagewrap.classList.add('ready');
+      reintentos = 0;
+
+      await dibujarTexto(page, viewport, vigente);
+      if (!vigente()) return;
+      await dibujarEnlaces(page, viewport, vigente);
+      if (!vigente()) return;
+      resaltar(opts.ocurrencia ?? 0, opts.desplazar !== false);
     } catch (e) {
-      if (e?.name !== 'RenderingCancelledException') {
-        console.error(e);
-        fail('Ocurrió un error al mostrar la página ' + num + '.');
+      // Una página abandonada por otra más nueva no es un error.
+      if (!vigente() || cancelada(e)) return;
+      console.error(e);
+      // Un tropiezo suelto (un trozo del PDF que no llegó) se reintenta
+      // una vez antes de molestar al usuario.
+      if (reintentos < 1) {
+        reintentos++;
+        setTimeout(() => { if (vigente()) renderPage(num, opts); }, 600);
+        return;
       }
+      reintentos = 0;
+      avisar('No se pudo mostrar la página ' + num + '. Revisa tu conexión.');
     } finally {
-      rendering = false;
-      renderTask = null;
-      if (pendingPage !== null) {
-        const p = pendingPage;
-        pendingPage = null;
-        renderPage(p);
+      if (vigente()) {
+        pagewrap.classList.remove('cargando');
+        renderTask = null;
       }
+    }
+  }
+
+  function cancelada(e){
+    return e?.name === 'RenderingCancelledException' || e?.name === 'AbortException';
+  }
+
+  async function dibujarTexto(page, viewport, vigente){
+    try {
+      const contenido = await page.getTextContent();
+      if (!vigente()) return;
+      textLayerDiv.replaceChildren();
+      textTask = new TextLayer({
+        textContentSource: contenido,
+        container: textLayerDiv,
+        viewport,
+      });
+      await textTask.render();
+      if (!vigente()) return;
+      // Sin este nodo, arrastrar para seleccionar se corta al final de la página.
+      const fin = document.createElement('div');
+      fin.className = 'endOfContent';
+      textLayerDiv.append(fin);
+    } catch (e) {
+      if (!cancelada(e)) console.error(e);
+    }
+  }
+
+  // Los enlaces del PDF se dibujan como anclas sobre la página: las
+  // externas abren en otra pestaña y las internas saltan a su destino.
+  async function dibujarEnlaces(page, viewport, vigente){
+    let anns;
+    try {
+      anns = await page.getAnnotations({ intent: 'display' });
+    } catch { return; }
+    if (!vigente()) return;
+    linkLayer.replaceChildren();
+    for (const a of anns) {
+      if (a.subtype !== 'Link') continue;
+      if (!a.url && !a.dest) continue;
+      const [x1, y1, x2, y2] = viewport.convertToViewportRectangle(a.rect);
+      const el = document.createElement('a');
+      el.style.left = Math.min(x1, x2) + 'px';
+      el.style.top = Math.min(y1, y2) + 'px';
+      el.style.width = Math.abs(x2 - x1) + 'px';
+      el.style.height = Math.abs(y2 - y1) + 'px';
+      if (a.url) {
+        el.href = a.url;
+        el.target = '_blank';
+        el.rel = 'noopener noreferrer';
+        el.title = a.url;
+      } else {
+        el.href = '#';
+        el.title = 'Ir a la sección referida';
+        el.addEventListener('click', (e) => { e.preventDefault(); irADestino(a.dest); });
+      }
+      linkLayer.append(el);
+    }
+  }
+
+  // Resuelve un destino interno del PDF (referencia o nombre) a su página.
+  async function irADestino(dest){
+    try {
+      const d = typeof dest === 'string' ? await pdf.getDestination(dest) : dest;
+      if (!Array.isArray(d) || !d.length) return;
+      const ref = d[0];
+      const idx = (typeof ref === 'object' && ref !== null)
+        ? await pdf.getPageIndex(ref)
+        : Number(ref);
+      if (Number.isFinite(idx)) renderPage(idx + 1);
+    } catch (e) {
+      console.error('No se pudo resolver el destino del enlace', e);
     }
   }
 
@@ -362,24 +757,387 @@
   pageInput.addEventListener('change', () => renderPage(parseInt(pageInput.value, 10) || 1));
 
   function setZoom(mult){
-    const current = scale ?? (parseFloat(zoomLabel.textContent) / 100 || 1);
-    scale = Math.min(Math.max(current * mult, 0.3), 4);
-    renderPage(pageNum);
+    const actual = scale ?? (parseFloat(zoomLabel.textContent) / 100 || 1);
+    scale = Math.min(Math.max(actual * mult, 0.3), 4);
+    renderPage(pageNum, { ocurrencia: ocurrenciaActiva, desplazar: false });
   }
   buttons.zoomIn.addEventListener('click', () => setZoom(1.2));
   buttons.zoomOut.addEventListener('click', () => setZoom(1 / 1.2));
 
+  let redibujo;
   window.addEventListener('resize', () => {
-    if (scale === null && pdf) renderPage(pageNum);
+    if (scale !== null || !pdf) return;
+    clearTimeout(redibujo);
+    redibujo = setTimeout(
+      () => renderPage(pageNum, { ocurrencia: ocurrenciaActiva, desplazar: false }), 150);
   });
 
+  // ============================================================
+  // Panel lateral
+  // ============================================================
+  let pestanaActiva = null;
+
+  function abrirPanel(cual){
+    if (panel.classList.contains('open') && cual === pestanaActiva) { cerrarPanel(); return; }
+    pestanaActiva = cual;
+    panel.classList.add('open');
+    $('tabBuscar').classList.toggle('on', cual === 'buscar');
+    $('tabIndice').classList.toggle('on', cual === 'indice');
+    $('paneBuscar').classList.toggle('on', cual === 'buscar');
+    $('paneIndice').classList.toggle('on', cual === 'indice');
+    $('toggleBuscar').classList.toggle('on', cual === 'buscar');
+    $('toggleIndice').classList.toggle('on', cual === 'indice');
+    if (cual === 'buscar') qInput.focus();
+    reajustar();
+  }
+
+  function cerrarPanel(){
+    panel.classList.remove('open');
+    pestanaActiva = null;
+    $('toggleBuscar').classList.remove('on');
+    $('toggleIndice').classList.remove('on');
+    reajustar();
+  }
+
+  // Al abrir o cerrar el panel cambia el ancho disponible: si el zoom
+  // está en "ajustar al ancho", hay que volver a dibujar la página.
+  function reajustar(){
+    if (scale === null && pdf) {
+      renderPage(pageNum, { ocurrencia: ocurrenciaActiva, desplazar: false });
+    }
+  }
+
+  $('toggleBuscar').addEventListener('click', () => abrirPanel('buscar'));
+  $('toggleIndice').addEventListener('click', () => abrirPanel('indice'));
+  $('tabBuscar').addEventListener('click', () => { pestanaActiva = null; abrirPanel('buscar'); });
+  $('tabIndice').addEventListener('click', () => { pestanaActiva = null; abrirPanel('indice'); });
+
+  // ============================================================
+  // Índice: marcadores que trae el propio PDF
+  // ============================================================
+  async function cargarIndice(){
+    const cont = $('outline');
+    let arbol = null;
+    try { arbol = await pdf.getOutline(); } catch { /* sin índice */ }
+    cont.replaceChildren();
+    if (!arbol || !arbol.length) {
+      const p = document.createElement('p');
+      p.className = 'empty';
+      p.textContent = 'Este documento no trae marcadores. Usa la búsqueda para localizar un tema.';
+      cont.append(p);
+      return;
+    }
+    const pintar = (items, nivel) => {
+      for (const it of items) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'lvl' + Math.min(nivel, 3);
+        b.textContent = (it.title || '').trim() || '(sin título)';
+        b.addEventListener('click', () => {
+          if (it.url) window.open(it.url, '_blank', 'noopener');
+          else if (it.dest) irADestino(it.dest);
+        });
+        cont.append(b);
+        if (it.items?.length) pintar(it.items, nivel + 1);
+      }
+    };
+    pintar(arbol, 0);
+  }
+
+  // ============================================================
+  // Búsqueda sobre el índice pre-generado (indice/<slug>/)
+  // Los lotes se descargan conforme se recorren y quedan en memoria:
+  // la primera búsqueda va mostrando resultados mientras avanza y las
+  // siguientes son inmediatas.
+  // ============================================================
+  const slug = entry ? entry.file.replace(/\.pdf$/i, '') : '';
+  const lotesEnMemoria = new Map();
+  let manifiesto = null;
+  let generacion = 0;          // cancela las búsquedas anteriores
+  let terminoActivo = '';      // término resaltado sobre la página
+  let ocurrenciaActiva = 0;
+  const MAX_RESULTADOS = 800;
+
+  // Quita acentos y mayúsculas SIN cambiar la longitud, para que las
+  // posiciones halladas sigan sirviendo sobre el texto original.
+  function plegar(s){
+    let out = '';
+    for (const ch of s) {
+      const base = ch.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      const c = (base.length === 1 ? base : ch).toLowerCase();
+      out += c.length === ch.length ? c : ch;
+    }
+    return out;
+  }
+
+  // Entre palabras se admite cualquier separación: el texto extraído de
+  // un PDF parte las frases de forma impredecible.
+  function patron(q){
+    const partes = plegar(q).trim().split(/\s+/)
+      .filter(Boolean)
+      .map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    if (!partes.length) return null;
+    return new RegExp(partes.join('\\s*'), 'g');
+  }
+
+  async function prepararBusqueda(){
+    try {
+      const r = await fetch('indice/' + encodeURIComponent(slug) + '/manifiesto.json');
+      if (!r.ok) throw new Error(r.status);
+      manifiesto = await r.json();
+    } catch {
+      manifiesto = null;
+      qInput.disabled = true;
+      qInput.placeholder = 'Búsqueda no disponible';
+      const p = document.createElement('p');
+      p.className = 'empty';
+      p.append('Este documento todavía no tiene índice de búsqueda. Genéralo con ');
+      const c = document.createElement('code');
+      c.textContent = 'node tools/indexar.mjs';
+      p.append(c, ' y vuelve a publicar el sitio.');
+      $('results').replaceChildren(p);
+    }
+  }
+
+  function lote(i){
+    if (!lotesEnMemoria.has(i)) {
+      lotesEnMemoria.set(
+        i,
+        fetch('indice/' + encodeURIComponent(slug) + '/' + String(i).padStart(3, '0') + '.json')
+          .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .catch(() => null),
+      );
+    }
+    return lotesEnMemoria.get(i);
+  }
+
+  // Fragmento de contexto con la coincidencia marcada.
+  function recorte(texto, ini, fin){
+    const desde = Math.max(0, ini - 45);
+    const hasta = Math.min(texto.length, fin + 55);
+    const frag = document.createDocumentFragment();
+    if (desde > 0) frag.append('…');
+    frag.append(texto.slice(desde, ini));
+    const m = document.createElement('mark');
+    m.textContent = texto.slice(ini, fin);
+    frag.append(m, texto.slice(fin, hasta));
+    if (hasta < texto.length) frag.append('…');
+    return frag;
+  }
+
+  function aviso(texto){
+    const p = document.createElement('p');
+    p.className = 'empty';
+    p.textContent = texto;
+    return p;
+  }
+
+  async function buscar(consulta){
+    const mio = ++generacion;
+    const results = $('results');
+    const info = $('searchInfo');
+    const bar = $('searchBar');
+    const q = consulta.trim();
+    const re = q.length >= 2 ? patron(q) : null;
+
+    terminoActivo = re ? q : '';
+    ocurrenciaActiva = 0;
+
+    if (!re) {
+      results.replaceChildren(aviso(
+        'Escribe al menos dos letras para buscar en todo el documento. No distingue mayúsculas ni acentos.'));
+      info.textContent = '';
+      bar.classList.remove('on');
+      if (pdf) resaltar(0, false);
+      return;
+    }
+    if (!manifiesto) return;
+
+    results.replaceChildren();
+    bar.classList.add('on');
+    bar.firstElementChild.style.width = '0%';
+    let total = 0;
+    let cortado = false;
+
+    for (let i = 0; i < manifiesto.lotes; i++) {
+      const datos = await lote(i);
+      if (mio !== generacion) return;      // llegó una búsqueda más nueva
+      bar.firstElementChild.style.width =
+        Math.round((i + 1) / manifiesto.lotes * 100) + '%';
+      if (!datos) continue;
+
+      for (let j = 0; j < datos.paginas.length; j++) {
+        const texto = datos.paginas[j];
+        if (!texto) continue;
+        const plano = plegar(texto);
+        const pagina = datos.desde + j;
+        re.lastIndex = 0;
+        let m, enPagina = 0;
+        while ((m = re.exec(plano)) !== null) {
+          if (m[0].length === 0) { re.lastIndex++; continue; }
+          if (total < MAX_RESULTADOS) {
+            const idx = enPagina;
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'result';
+            const pg = document.createElement('span');
+            pg.className = 'pg';
+            pg.textContent = 'Página ' + pagina;
+            const sn = document.createElement('span');
+            sn.className = 'snip';
+            sn.append(recorte(texto, m.index, m.index + m[0].length));
+            b.append(pg, sn);
+            b.addEventListener('click', () => {
+              results.querySelectorAll('.result.on').forEach((n) => n.classList.remove('on'));
+              b.classList.add('on');
+              renderPage(pagina, { ocurrencia: idx });
+            });
+            results.append(b);
+          } else {
+            cortado = true;
+          }
+          total++;
+          enPagina++;
+          if (enPagina >= 300) break;      // páginas fuera de lo común
+        }
+      }
+      info.textContent = total ? total + ' hasta ahora…' : 'buscando…';
+    }
+
+    if (mio !== generacion) return;
+    bar.classList.remove('on');
+    if (!total) {
+      results.replaceChildren(aviso('Sin coincidencias para “' + q + '”.'));
+      info.textContent = '0 resultados';
+    } else {
+      info.textContent = total + (total === 1 ? ' resultado' : ' resultados') +
+        (cortado ? ' · se listan los primeros ' + MAX_RESULTADOS : '');
+    }
+    if (pdf) resaltar(0, false);
+  }
+
+  // ============================================================
+  // Resaltado del término sobre la página dibujada
+  // Se busca sobre la capa de texto real, así los recuadros caen
+  // exactamente encima de las palabras aunque cambie el zoom.
+  // ============================================================
+  function resaltar(ocurrencia, desplazar){
+    markLayer.replaceChildren();
+    ocurrenciaActiva = ocurrencia;
+    const re = terminoActivo ? patron(terminoActivo) : null;
+    if (!re) return;
+
+    // Nodos de texto de la capa de pdf.js, en orden de lectura.
+    const walker = document.createTreeWalker(textLayerDiv, NodeFilter.SHOW_TEXT);
+    const nodos = [];
+    let cadena = '';
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      nodos.push({ nodo: n, inicio: cadena.length, largo: n.nodeValue.length });
+      cadena += n.nodeValue;
+    }
+    if (!cadena) return;
+
+    const plano = plegar(cadena);
+    const base = pagewrap.getBoundingClientRect();
+
+    // Búsqueda binaria del nodo que contiene una posición dada.
+    const ubicar = (pos) => {
+      let lo = 0, hi = nodos.length - 1;
+      while (lo < hi) {
+        const mid = (lo + hi + 1) >> 1;
+        if (nodos[mid].inicio <= pos) lo = mid; else hi = mid - 1;
+      }
+      return nodos[lo];
+    };
+
+    let m, k = 0, activo = null;
+    re.lastIndex = 0;
+    while ((m = re.exec(plano)) !== null) {
+      if (m[0].length === 0) { re.lastIndex++; continue; }
+      const fin = m.index + m[0].length;
+      const a = ubicar(m.index);
+      const b = ubicar(fin - 1);
+      const rango = document.createRange();
+      try {
+        rango.setStart(a.nodo, m.index - a.inicio);
+        rango.setEnd(b.nodo, Math.min(b.largo, fin - b.inicio));
+      } catch { k++; continue; }
+      const esActivo = k === ocurrencia;
+      for (const r of rango.getClientRects()) {
+        if (!r.width || !r.height) continue;
+        const caja = document.createElement('i');
+        caja.style.left = (r.left - base.left) + 'px';
+        caja.style.top = (r.top - base.top) + 'px';
+        caja.style.width = r.width + 'px';
+        caja.style.height = r.height + 'px';
+        if (esActivo) { caja.className = 'on'; activo ??= caja; }
+        markLayer.append(caja);
+      }
+      k++;
+    }
+
+    if (desplazar && activo) {
+      const y = pagewrap.offsetTop + parseFloat(activo.style.top);
+      stage.scrollTop = Math.max(0, y - stage.clientHeight / 2);
+    }
+  }
+
+  // ---- caja de búsqueda ----
+  let espera;
+  qInput.addEventListener('input', () => {
+    $('searchField').classList.toggle('filled', qInput.value.length > 0);
+    clearTimeout(espera);
+    espera = setTimeout(() => buscar(qInput.value), 350);
+  });
+  qInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { clearTimeout(espera); buscar(qInput.value); }
+    if (e.key === 'Escape') {
+      qInput.value = '';
+      $('searchField').classList.remove('filled');
+      clearTimeout(espera);
+      buscar('');
+    }
+  });
+  $('qClear').addEventListener('click', () => {
+    qInput.value = '';
+    $('searchField').classList.remove('filled');
+    clearTimeout(espera);
+    buscar('');
+    qInput.focus();
+  });
+
+  // ============================================================
+  // Atajos de teclado
+  // ============================================================
   document.addEventListener('keydown', (e) => {
-    if (e.target === pageInput) return;
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+      e.preventDefault();
+      if (!panel.classList.contains('open') || pestanaActiva !== 'buscar') {
+        pestanaActiva = null;
+        abrirPanel('buscar');
+      }
+      qInput.select();
+      return;
+    }
+    if (e.target === pageInput || e.target === qInput) return;
     if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); renderPage(pageNum + 1); }
     if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); renderPage(pageNum - 1); }
     if (e.key === '+') setZoom(1.2);
     if (e.key === '-') setZoom(1 / 1.2);
   });
+
+  // ============================================================
+  // Arranque
+  // ============================================================
+  if (!entry) {
+    fail('No se indicó qué documento abrir. Regresa al repositorio y elige uno.');
+    qInput.disabled = true;
+  } else {
+    $('docCode').textContent = entry.code;
+    $('docTitle').textContent = entry.title;
+    document.title = entry.title + ' · SPAC';
+    abrir(entry);
+  }
 </script>
 </body>
 </html>

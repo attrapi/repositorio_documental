@@ -1,0 +1,10 @@
+{
+  "name": "repositorio-documental",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "indexar": "node --max-old-space-size=4096 tools/indexar.mjs",
+    "dev": "wrangler pages dev --r2 DOCS=documentos",
+    "desplegar": "wrangler pages deploy"
+  }
+}

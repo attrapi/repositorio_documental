@@ -5,3 +5,7 @@ docs/*.pdf
 # Estado local de wrangler / node
 .wrangler/
 node_modules/
+
+# El índice de búsqueda se genera con `node tools/indexar.mjs` a partir de
+# los PDFs de docs/; pesa decenas de MB y viaja al desplegar, no por git.
+public/indice/
